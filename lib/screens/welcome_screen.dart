@@ -1,35 +1,24 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_header.dart';
+import 'about_screen.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({super.key});
+class WelcomeScreen extends StatelessWidget {
+  final VoidCallback onToggleTheme;
 
-  @override
-  State<WelcomeScreen> createState() => _WelcomeScreenState();
-}
-
-class _WelcomeScreenState extends State<WelcomeScreen> {
-  // Placeholder only — real app-wide theme wiring comes separately.
-  bool _isDarkIcon = false;
-
-  void _toggleTheme() {
-    setState(() => _isDarkIcon = !_isDarkIcon);
-  }
+  const WelcomeScreen({super.key, required this.onToggleTheme});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFBFB),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
             children: [
               // Logo left, theme toggle right
-              AppHeader(
-                isDarkIcon: _isDarkIcon,
-                onToggleTheme: _toggleTheme,
-              ),
+              AppHeader(onToggleTheme: onToggleTheme),
 
               const Spacer(),
 
@@ -44,7 +33,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF161B1D),
                 ),
               ),
 
@@ -53,47 +41,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               const Text(
                 'Get your trusted contacts notified\nbefore your phone goes offline.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF5C6B70),
-                ),
+                style: TextStyle(fontSize: 14),
               ),
 
               const SizedBox(height: 16),
 
-              // About + How it works — both are links to the About screen
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      // TODO: navigate to AboutScreen (Milestone 3)
-                    },
-                    child: const Text(
-                      'About',
+              // About StayConnected — single link to the About screen
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AboutScreen()),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'About StayConnected',
                       style: TextStyle(
-                        color: Color(0xFF1D6FA5),
+                        color: Theme.of(context).colorScheme.primary,
                         fontSize: 13,
                       ),
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text('•', style: TextStyle(color: Color(0xFF5C6B70))),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // TODO: navigate to AboutScreen, "how it works" section
-                    },
-                    child: const Text(
-                      'How it works',
-                      style: TextStyle(
-                        color: Color(0xFF1D6FA5),
-                        fontSize: 13,
-                      ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_forward,
+                      size: 14,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
               const Spacer(),
@@ -102,31 +81,45 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildDot(active: true),
-                  _buildDot(active: false),
-                  _buildDot(active: false),
+                  _buildDot(context, active: true),
+                  _buildDot(context, active: false),
+                  _buildDot(context, active: false),
                 ],
               ),
 
               const SizedBox(height: 24),
 
-              // Get Started CTA — now the single way forward from this screen
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: navigate to Login/Register (Milestone 5)
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1D6FA5),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+              // Get Started CTA — with glow in dark mode
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: isDark
+                      ? [
+                          BoxShadow(
+                            color: const Color(0xFF3FA9F5).withOpacity(0.45),
+                            blurRadius: 20,
+                            spreadRadius: 1,
+                          ),
+                        ]
+                      : null,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // TODO: navigate to Login/Register (Milestone 5)
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    'Get Started →',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    child: const Text(
+                      'Get Started →',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
                 ),
               ),
@@ -139,13 +132,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
-  Widget _buildDot({required bool active}) {
+  Widget _buildDot(BuildContext context, {required bool active}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       width: active ? 20 : 8,
       height: 8,
       decoration: BoxDecoration(
-        color: active ? const Color(0xFF1D6FA5) : const Color(0xFFEAF4F2),
+        color: active
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(4),
       ),
     );
@@ -161,13 +156,13 @@ class _SafetyIllustration extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: const Color(0xFFEAF4F2),
+        color: Theme.of(context).colorScheme.surface,
         shape: BoxShape.circle,
       ),
-      child: const Icon(
+      child: Icon(
         Icons.phonelink_ring,
         size: 72,
-        color: Color(0xFF2E9E6D),
+        color: Theme.of(context).colorScheme.secondary,
       ),
     );
   }

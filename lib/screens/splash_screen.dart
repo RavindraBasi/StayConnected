@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final VoidCallback onToggleTheme;
+
+  const SplashScreen({super.key, required this.onToggleTheme});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -17,11 +19,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _goToWelcomeAfterDelay() {
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const WelcomeScreen()),
+        MaterialPageRoute(
+          builder: (_) => WelcomeScreen(onToggleTheme: widget.onToggleTheme),
+        ),
       );
     });
   }
@@ -29,13 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFBFB),
       body: SafeArea(
         child: Center(
-          child: Image.asset(
-            'assets/images/logo.png',
-            width: 300,
-          ),
+          child: Image.asset('assets/images/logo.png', width: 300),
         ),
       ),
     );
