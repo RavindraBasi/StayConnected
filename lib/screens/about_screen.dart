@@ -69,10 +69,7 @@ class _AboutScreenState extends State<AboutScreen> {
             // "How it works" section — this is where we scroll to.
             // "How it works" section — this is where we scroll to.
             Container(key: _howItWorksKey),
-            _buildSection(
-              title: 'How it works',
-              body: '',
-            ),
+            _buildSection(title: 'How it works', body: ''),
             const SizedBox(height: 16),
             _buildStep(
               number: '1',
@@ -84,13 +81,15 @@ class _AboutScreenState extends State<AboutScreen> {
               number: '2',
               icon: Icons.tune,
               title: 'Choose your alert settings',
-              description: 'Decide when the app should alert them — like a critical battery level.',
+              description:
+                  'Decide when the app should alert them — like a critical battery level.',
             ),
             _buildStep(
               number: '3',
               icon: Icons.phone_iphone,
               title: 'Use your phone normally',
-              description: 'StayConnected quietly keeps an eye on your battery in the background.',
+              description:
+                  'StayConnected quietly keeps an eye on your battery in the background.',
             ),
             _buildStep(
               number: '4',
@@ -102,7 +101,8 @@ class _AboutScreenState extends State<AboutScreen> {
               number: '5',
               icon: Icons.send,
               title: 'Alert is sent automatically',
-              description: 'StayConnected messages your trusted contacts right away.',
+              description:
+                  'StayConnected messages your trusted contacts right away.',
             ),
             _buildStep(
               number: '6',
@@ -115,7 +115,8 @@ class _AboutScreenState extends State<AboutScreen> {
               number: '7',
               icon: Icons.people,
               title: 'Your contact is in the loop',
-              description: 'They know you may go offline soon — and where to start looking if needed.',
+              description:
+                  'They know you may go offline soon — and where to start looking if needed.',
               isLast: true,
             ),
           ],
@@ -151,13 +152,13 @@ class _AboutScreenState extends State<AboutScreen> {
     );
   }
 
-Widget _buildStep({
-  required String number,
-  required IconData icon,
-  required String title,
-  required String description,
-  bool isLast = false,
-  }){
+  Widget _buildStep({
+    required String number,
+    required IconData icon,
+    required String title,
+    required String description,
+    bool isLast = false,
+  }) {
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,10 +185,7 @@ Widget _buildStep({
               ),
               if (!isLast)
                 Expanded(
-                  child: Container(
-                    width: 2,
-                    color: const Color(0xFFEAF4F2),
-                  ),
+                  child: Container(width: 2, color: const Color(0xFFEAF4F2)),
                 ),
             ],
           ),

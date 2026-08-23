@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_header.dart';
 import 'about_screen.dart';
+import 'login.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final VoidCallback onToggleTheme;
@@ -106,9 +107,14 @@ class WelcomeScreen extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: navigate to Login/Register (Milestone 5)
-                    },
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => LoginScreen(
+                          onToggleTheme: onToggleTheme,
+                        ),
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16),

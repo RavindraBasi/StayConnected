@@ -12,9 +12,14 @@ class AppHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset(
-          isDark ? 'assets/images/logo_dark.png' : 'assets/images/logo.png',
-          width: 80,
+        Transform.translate(
+          offset: const Offset(-24, 0),
+          child: Image.asset(
+            isDark ? 'assets/images/logo_dark.png' : 'assets/images/logo.png',
+            width: 160,
+            height: 64,
+            fit: BoxFit.contain,
+          ),
         ),
         InkWell(
           onTap: onToggleTheme,
