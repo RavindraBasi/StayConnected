@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/app_header.dart';
+import '../widgets/theme_toggle_button.dart';
 import 'about_screen.dart';
 import 'login.dart';
 
@@ -19,7 +19,10 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             children: [
               // Logo left, theme toggle right
-              AppHeader(onToggleTheme: onToggleTheme),
+              Align(
+                alignment: Alignment.topRight,
+                child: ThemeToggleButton(onToggleTheme: onToggleTheme),
+              ),
 
               const Spacer(),
 
@@ -159,17 +162,11 @@ class _SafetyIllustration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(28),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        Icons.phonelink_ring,
-        size: 72,
-        color: Theme.of(context).colorScheme.secondary,
-      ),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Image.asset(
+      isDark ? 'assets/images/logo_dark.png' : 'assets/images/logo.png',
+      width: 160,
     );
   }
 }
