@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'register.dart';
+import 'dashboard_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback onToggleTheme;
@@ -24,14 +26,21 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     FocusScope.of(context).unfocus();
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Login is ready to connect.')));
-  }
 
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', true);
+
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DashboardScreen(onToggleTheme: widget.onToggleTheme),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -135,9 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            // TODO: wire up authentication later
-                          },
+                          onPressed: _submit,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).colorScheme.primary,
                             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -154,26 +161,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text('New to StayConnected?'),
                           TextButton(
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
                             onPressed: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => RegisterScreen(
-                                  onToggleTheme: widget.onToggleTheme,
-                                ),
+                                builder: (_) => RegisterScreen(onToggleTheme: widget.onToggleTheme),
                               ),
                             ),
                             child: const Text('Create account'),
                           ),
                         ],
                       ),
-              ],
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+          );
+        }
+      }
+      
