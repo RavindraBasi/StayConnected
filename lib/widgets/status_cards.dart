@@ -6,12 +6,14 @@ class BatteryStatusCard extends StatelessWidget {
   final int batteryLevel; // dummy value, e.g. 82
   final int alertThreshold; // dummy value, e.g. 20
   final String statusLabel; // dummy value, e.g. "Monitoring normally"
+  final String location;
 
   const BatteryStatusCard({
     super.key,
     this.batteryLevel = 82,
     this.alertThreshold = 20,
     this.statusLabel = 'Monitoring normally',
+    this.location = 'Bengaluru, India',
   });
 
   @override
@@ -27,25 +29,83 @@ class BatteryStatusCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(Icons.battery_charging_full, color: colors.secondary),
-              const SizedBox(width: 8),
-              Text(
-                'Battery: $batteryLevel%',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+          Text(
+            'Device status',
+            style: TextStyle(
+              color: colors.primary,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.3,
+            ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 14),
+          _StatusDetailRow(
+            icon: Icons.battery_charging_full,
+            label: 'Battery',
+            value: '$batteryLevel%',
+            valueColor: colors.secondary,
+          ),
+          const SizedBox(height: 14),
+          Divider(color: colors.onSurface.withValues(alpha: 0.1), height: 1),
+          const SizedBox(height: 14),
+          _StatusDetailRow(
+            icon: Icons.location_on_outlined,
+            label: 'Location',
+            value: location,
+            valueColor: colors.primary,
+          ),
+          const SizedBox(height: 14),
           Text('Alert threshold: $alertThreshold%'),
           const SizedBox(height: 4),
           Text('Status: $statusLabel'),
         ],
       ),
+    );
+  }
+}
+
+class _StatusDetailRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color valueColor;
+
+  const _StatusDetailRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: valueColor, size: 23),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(color: colors.onSurfaceVariant, fontSize: 13),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
