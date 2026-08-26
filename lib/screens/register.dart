@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'login.dart';
 
 class RegisterScreen extends StatefulWidget {
   final VoidCallback onToggleTheme;
